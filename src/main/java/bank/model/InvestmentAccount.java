@@ -4,6 +4,7 @@ public class InvestmentAccount extends Account implements InterestBearing {
     private static final double INTEREST_RATE = 0.05;              // 5% per month
     private static final double MINIMUM_OPENING_DEPOSIT = 500.00;
 
+    // Opening a new account: needs at least BWP500.00
     public InvestmentAccount(String accountNumber, String branch,
                              String customerId, double initialDeposit) {
         super(accountNumber, branch, customerId);
@@ -12,6 +13,11 @@ public class InvestmentAccount extends Account implements InterestBearing {
                 "An Investment account needs an opening deposit of at least BWP" + MINIMUM_OPENING_DEPOSIT);
         }
         deposit(initialDeposit, "Initial deposit");
+    }
+
+    // Used when an existing account is loaded from the database
+    public InvestmentAccount(String accountNumber, String branch, String customerId) {
+        super(accountNumber, branch, customerId);
     }
 
     @Override

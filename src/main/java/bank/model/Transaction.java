@@ -10,10 +10,17 @@ public class Transaction {
     private final double balanceAfter;
     private final String description;
 
+    // Used for a new transaction (date is today)
     public Transaction(String transactionId, String type, double amount,
                        double balanceAfter, String description) {
+        this(transactionId, LocalDate.now(), type, amount, balanceAfter, description);
+    }
+
+    // Used when a saved transaction is loaded from the database
+    public Transaction(String transactionId, LocalDate date, String type, double amount,
+                       double balanceAfter, String description) {
         this.transactionId = transactionId;
-        this.date = LocalDate.now();
+        this.date = date;
         this.type = type;
         this.amount = amount;
         this.balanceAfter = balanceAfter;

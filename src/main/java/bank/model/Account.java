@@ -6,12 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class Account {
-    private static int transactionCounter = 1;
-
     private final String accountNumber;
     private double balance;
     private final String branch;
-    private final LocalDate dateOpened;
+    private LocalDate dateOpened;
     private final String customerId;
     private final List<Transaction> transactions = new ArrayList<>();
 
@@ -45,7 +43,7 @@ public abstract class Account {
         return true;
     }
 
-    // The only way the balance changes (there is no setBalance)
+    // The only way the balance changes while the system is running
     protected void recordTransaction(String type, double amount) {
         addTransaction(type, amount, type);
     }
@@ -56,8 +54,16 @@ public abstract class Account {
         } else {
             balance -= amount;          // WITHDRAWAL or FEE
         }
-        String id = String.format("T%04d", transactionCounter++);
+        String id = accountNumber + "-" + (transactions.size() + 1);
         transactions.add(new Transaction(id, type, amount, balance, description));
+    }
+
+    // Used only by the DAO to rebuild an account that was loaded from the database
+    public void restoreState(double balance, LocalDate dateOpened, List<Transaction> history) {
+        this.balance = balance;
+        this.dateOpened = dateOpened;
+        this.transactions.clear();
+        this.transactions.addAll(history);
     }
 
     public abstract String getAccountType();
